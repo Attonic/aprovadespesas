@@ -2,6 +2,7 @@ package io.github.aprovadespesas.exception.handler;
 
 import io.github.aprovadespesas.exception.ConflictException;
 import io.github.aprovadespesas.exception.InvalidStateTransitionException;
+import io.github.aprovadespesas.exception.NotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ErrorResponse> handlerConflictException(ConflictException e,  HttpServletRequest request){
         return buildResponse(HttpStatus.CONFLICT, e.getMessage(), e.getMessages(), request);
+    }
+
+    //404
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlerNotFoundException(NotFoundException e,  HttpServletRequest request) {
+        return buildResponse(HttpStatus.NOT_FOUND, e.getMessage(), e.getMessages(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
