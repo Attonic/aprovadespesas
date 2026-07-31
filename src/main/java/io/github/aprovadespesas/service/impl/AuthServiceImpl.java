@@ -1,5 +1,6 @@
 package io.github.aprovadespesas.service.impl;
 
+import io.github.aprovadespesas.dto.request.ChangePasswordRequest;
 import io.github.aprovadespesas.dto.request.LoginRequest;
 import io.github.aprovadespesas.dto.request.RegisterUserRequest;
 import io.github.aprovadespesas.dto.response.AuthResponse;
@@ -52,7 +53,27 @@ public class AuthServiceImpl implements AuthService {
         return token(user);
     }
 
-    //TODO Implementar Troca de Senha
+    @Override
+    @Transactional
+    public void changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
+            User user = userRepository.findById(id).orElseThrow();
+
+            //Todo ver uma exceção personalizada para isso
+            if (!passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
+                throw new IllegalArgumentException("Senha atual incorreta.");
+            }
+
+            if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmPassword())){
+                throw new IllegalArgumentException("Senhas não conferem");
+            }
+
+            if (passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
+                throw new IllegalArgumentException("Senha atual não pode ser a mesma da nova.");
+            }
+
+            user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
+            userRepository.save(user);
+    }
 
     private AuthResponse token(User user) {
         return AuthResponse.builder()

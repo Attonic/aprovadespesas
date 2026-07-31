@@ -1,5 +1,6 @@
 package io.github.aprovadespesas.controller;
 
+import io.github.aprovadespesas.dto.request.ChangePasswordRequest;
 import io.github.aprovadespesas.dto.request.LoginRequest;
 import io.github.aprovadespesas.dto.request.RegisterUserRequest;
 import io.github.aprovadespesas.dto.response.AuthResponse;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,4 +42,12 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(authResponse);
     }
 
+    @PostMapping("{id}/password")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long id,
+            @Valid @RequestBody ChangePasswordRequest changePasswordRequest
+            ){
+        authService.changePassword(id, changePasswordRequest);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -15,7 +15,7 @@ public record LoginRequest(
         String email,
 
         @NotBlank(message = "Senha é obrigatória")
-        @Size(min = 6, max = 16, message = "Senha deve ter entre 6 a 20 caracteres.")
+        @Size(min = 6, max = 100, message = "Senha deve ter entre 6 a 20 caracteres.")
         String password
 ) {
 }
