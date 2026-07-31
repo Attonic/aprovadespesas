@@ -6,6 +6,7 @@ import io.github.aprovadespesas.dto.request.RegisterUserRequest;
 import io.github.aprovadespesas.dto.response.AuthResponse;
 import io.github.aprovadespesas.entity.User;
 import io.github.aprovadespesas.exception.ConflictException;
+import io.github.aprovadespesas.exception.NotFoundException;
 import io.github.aprovadespesas.repositories.DepartmentRepository;
 import io.github.aprovadespesas.repositories.UserRepository;
 import io.github.aprovadespesas.security.JwtService;
@@ -31,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponse register(RegisterUserRequest registerUserRequest) {
         if (userRepository.existsByEmail(registerUserRequest.email())){
-            throw new ConflictException("Email já cadastrado."); //TODO Criar exceção personalizada
+            throw new ConflictException("Email já cadastrado.");
         }
         var builder = User.builder()
                 .name(registerUserRequest.name())
@@ -39,8 +40,11 @@ public class AuthServiceImpl implements AuthService {
                 .password(passwordEncoder.encode(registerUserRequest.password()))
                 .role(registerUserRequest.role());
 
-        if (registerUserRequest.departmentId() != null) {//TODO Criar exceção personalizada
-            builder.department(departmentRepository.findById(registerUserRequest.departmentId()).orElseThrow());
+        if (registerUserRequest.departmentId() != null) {
+            builder.department(departmentRepository
+                    .findById(registerUserRequest.departmentId())
+                    .orElseThrow(() -> new NotFoundException("Departamento não encontrado."))
+            );
         }
         return token(userRepository.save(builder.build()));
     }
@@ -57,7 +61,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void changePassword(Long id, ChangePasswordRequest changePasswordRequest) {
-            User user = userRepository.findById(id).orElseThrow();
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
             //Todo ver uma exceção personalizada para isso
             if (!passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
