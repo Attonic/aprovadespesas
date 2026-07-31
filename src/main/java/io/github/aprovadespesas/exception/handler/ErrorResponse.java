@@ -1,4 +1,4 @@
-package io.github.aprovadespesas.exception;
+package io.github.aprovadespesas.exception.handler;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;

@@ -1,5 +1,7 @@
-package io.github.aprovadespesas.exception;
+package io.github.aprovadespesas.exception.handler;
 
+import io.github.aprovadespesas.exception.ConflictException;
+import io.github.aprovadespesas.exception.InvalidStateTransitionException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidStateTransitionException.class)
     public ResponseEntity<ErrorResponse> handlerInvalidStateTransitionException(InvalidStateTransitionException e, HttpServletRequest request){
         return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e.getMessages(), request);
+    }
+
+    //409
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponse> handlerConflictException(ConflictException e,  HttpServletRequest request){
+        return buildResponse(HttpStatus.CONFLICT, e.getMessage(), e.getMessages(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
