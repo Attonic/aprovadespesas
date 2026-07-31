@@ -5,6 +5,7 @@ import io.github.aprovadespesas.dto.request.LoginRequest;
 import io.github.aprovadespesas.dto.request.RegisterUserRequest;
 import io.github.aprovadespesas.dto.response.AuthResponse;
 import io.github.aprovadespesas.entity.User;
+import io.github.aprovadespesas.exception.ConflictException;
 import io.github.aprovadespesas.repositories.DepartmentRepository;
 import io.github.aprovadespesas.repositories.UserRepository;
 import io.github.aprovadespesas.security.JwtService;
@@ -30,7 +31,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public AuthResponse register(RegisterUserRequest registerUserRequest) {
         if (userRepository.existsByEmail(registerUserRequest.email())){
-            throw new RuntimeException("Email já cadastrado."); //TODO Criar exceção personalizada
+            throw new ConflictException("Email já cadastrado."); //TODO Criar exceção personalizada
         }
         var builder = User.builder()
                 .name(registerUserRequest.name())
@@ -68,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
             }
 
             if (passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
-                throw new IllegalArgumentException("Senha atual não pode ser a mesma da nova.");
+                throw new ConflictException("Senha atual não pode ser a mesma da nova.");
             }
 
             user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
