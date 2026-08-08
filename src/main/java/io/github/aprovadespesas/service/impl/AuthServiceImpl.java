@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                     .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
             //Todo ver uma exceção personalizada para isso
-            if (!passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
+            if (!passwordEncoder.matches( changePasswordRequest.currentPassword(), user.getPassword())){
                 throw new IllegalArgumentException("Senha atual incorreta.");
             }
 
@@ -73,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
                 throw new IllegalArgumentException("Senhas não conferem");
             }
 
-            if (passwordEncoder.matches(user.getPassword(), changePasswordRequest.currentPassword())){
+            if (passwordEncoder.matches( changePasswordRequest.newPassword(), user.getPassword())){
                 throw new ConflictException("Senha atual não pode ser a mesma da nova.");
             }
 
