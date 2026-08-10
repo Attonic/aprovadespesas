@@ -4,6 +4,7 @@ import io.github.aprovadespesas.exception.ConflictException;
 import io.github.aprovadespesas.exception.InvalidCredentialException;
 import io.github.aprovadespesas.exception.InvalidStateTransitionException;
 import io.github.aprovadespesas.exception.NotFoundException;
+import io.github.aprovadespesas.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidCredentialException.class)
     public ResponseEntity<ErrorResponse> handlerInvalidCredentialException(InvalidCredentialException e,  HttpServletRequest request){
         return buildResponse(HttpStatus.BAD_REQUEST, e.getMessage(), e.getMessages(), request);
+    }
+
+    //401
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handlerUnauthorizedException(UnauthorizedException e,  HttpServletRequest request) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), e.getMessages(), request)
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
