@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     //401
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handlerUnauthorizedException(UnauthorizedException e,  HttpServletRequest request) {
-        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), e.getMessages(), request)
+        return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), e.getMessages(), request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
