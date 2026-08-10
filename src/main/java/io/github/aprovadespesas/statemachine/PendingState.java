@@ -1,9 +1,9 @@
 package io.github.aprovadespesas.statemachine;
 
-import com.sun.jdi.request.InvalidRequestStateException;
 import io.github.aprovadespesas.entity.Expense;
 import io.github.aprovadespesas.entity.User;
 import io.github.aprovadespesas.entity.enums.ExpenseStatus;
+import io.github.aprovadespesas.exception.InvalidStateTransitionException;
 
 import java.time.LocalDateTime;
 
@@ -24,10 +24,10 @@ public class PendingState implements ExpenseState{
             expense.setRejectionReason(reason);
     }
 
-    //TODO corrigir essa exception para uma personalizada = InvelidStateTransitionException
+
     @Override
     public void pay(Expense expense, User review) {
-        throw new InvalidRequestStateException("Despensa como pendente não pode ser paga antes da aprovação.");
+        throw new InvalidStateTransitionException("Despensa como pendente não pode ser paga antes da aprovação.");
     }
 
     @Override
