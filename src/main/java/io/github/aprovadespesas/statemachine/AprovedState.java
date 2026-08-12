@@ -26,6 +26,7 @@ public class AprovedState implements ExpenseState{
         expense.setPaidAt(LocalDateTime.now());
     }
 
+    //Análisar
     @Override
     public void cancel(Expense expense, User review) {
 
