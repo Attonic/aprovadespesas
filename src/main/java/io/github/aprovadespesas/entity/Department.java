@@ -33,10 +33,10 @@ public class Department {
     @Column(name = "department_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 250)
+    @Column(nullable = false, unique = true, length = 150)
     private String name;
 
-    @Column(length = 500)
+    @Column(nullable = false, length = 500)
     private String description;
 
     @Override
