@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class DepartmentServiceImpl implements DepartmentServcie {
 
     private final DepartmentRepository departmentRepository;
 
+    @Transactional(readOnly = true)
     @Override
     public DepartmentResponse findById(Long id) {
         Department department = departmentRepository.findById(id)
@@ -25,6 +27,7 @@ public class DepartmentServiceImpl implements DepartmentServcie {
         return DepartmentResponse.fromEntity(department);
     }
 
+    @Transactional
     @Override
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest) {
         Department department = Department.builder()
@@ -36,6 +39,7 @@ public class DepartmentServiceImpl implements DepartmentServcie {
         return DepartmentResponse.fromEntity(department);
     }
 
+    @Transactional
     @Override
     public DepartmentResponse updateDeparment(DepartmentRequest departmentRequest) {
 
@@ -54,6 +58,7 @@ public class DepartmentServiceImpl implements DepartmentServcie {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public DepartmentResponse findByName(String name) {
         Department department = departmentRepository.findByName(name)
@@ -62,6 +67,7 @@ public class DepartmentServiceImpl implements DepartmentServcie {
 
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<DepartmentResponse> findAll(Pageable pageable) {
         return departmentRepository.findAll(pageable)
