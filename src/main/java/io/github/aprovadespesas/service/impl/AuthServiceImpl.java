@@ -6,6 +6,7 @@ import io.github.aprovadespesas.dto.request.RegisterUserRequest;
 import io.github.aprovadespesas.dto.response.AuthResponse;
 import io.github.aprovadespesas.entity.User;
 import io.github.aprovadespesas.exception.ConflictException;
+import io.github.aprovadespesas.exception.InvalidCredentialException;
 import io.github.aprovadespesas.exception.NotFoundException;
 import io.github.aprovadespesas.repositories.DepartmentRepository;
 import io.github.aprovadespesas.repositories.UserRepository;
@@ -54,7 +55,8 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.email(), request.password()
         ));
-        var user = userRepository.findByEmail(request.email()).orElseThrow(); //TODO Exceção
+        var user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
         return token(user);
     }
 
@@ -64,13 +66,13 @@ public class AuthServiceImpl implements AuthService {
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new NotFoundException("Usuário não encontrado."));
 
-            //Todo ver uma exceção personalizada para isso
+
             if (!passwordEncoder.matches( changePasswordRequest.currentPassword(), user.getPassword())){
-                throw new IllegalArgumentException("Senha atual incorreta.");
+                throw new InvalidCredentialException("Senha atual incorreta.");
             }
 
             if (!changePasswordRequest.newPassword().equals(changePasswordRequest.confirmPassword())){
-                throw new IllegalArgumentException("Senhas não conferem");
+                throw new InvalidCredentialException("Senhas não conferem");
             }
 
             if (passwordEncoder.matches( changePasswordRequest.newPassword(), user.getPassword())){
