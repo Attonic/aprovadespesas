@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record DepartmentRequest(
 
-        Long id,
 
         @NotBlank(message = "O nome do Departamento deve Ser informado.")
         @Size(max = 150, message = "Nome deve ter no máximo 250 caracteres.")
