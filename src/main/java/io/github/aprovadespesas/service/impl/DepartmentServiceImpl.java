@@ -41,13 +41,13 @@ public class DepartmentServiceImpl implements DepartmentServcie {
 
     @Transactional
     @Override
-    public DepartmentResponse updateDeparment(DepartmentRequest departmentRequest) {
+    public DepartmentResponse updateDeparment(Long id, DepartmentRequest departmentRequest) {
 
         if (departmentRepository.existsByName(departmentRequest.name())){
             throw new ConflictException("Já existe departamento com esse nome.");
         }
 
-        Department department = departmentRepository.findById(departmentRequest.id())
+        Department department = departmentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Departamento não encontrado."));
 
         department.setName(departmentRequest.name());

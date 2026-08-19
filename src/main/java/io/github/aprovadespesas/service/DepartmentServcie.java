@@ -11,7 +11,7 @@ public interface DepartmentServcie {
 
     DepartmentResponse createDepartment(DepartmentRequest departmentRequest);
 
-    DepartmentResponse updateDeparment(DepartmentRequest departmentRequest);
+    DepartmentResponse updateDeparment(Long id, DepartmentRequest departmentRequest);
 
     DepartmentResponse findByName(String name);
 
