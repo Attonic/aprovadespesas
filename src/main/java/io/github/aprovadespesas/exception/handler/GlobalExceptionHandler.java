@@ -8,6 +8,7 @@ import io.github.aprovadespesas.exception.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handlerUnauthorizedException(UnauthorizedException e,  HttpServletRequest request) {
         return buildResponse(HttpStatus.UNAUTHORIZED, e.getMessage(), e.getMessages(), request);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handlerValidadtion(MethodArgumentNotValidException e,  HttpServletRequest request) {
+        List<String> messages = e.getBindingResult().getFieldErrors().stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .toList();
+        return buildResponse(HttpStatus.BAD_REQUEST, "Erro de Validação", messages, request);
     }
 
     private ResponseEntity<ErrorResponse> buildResponse(
