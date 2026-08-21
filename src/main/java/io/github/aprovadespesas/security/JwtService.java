@@ -24,8 +24,10 @@ public class JwtService {
     public String generateToken(UserDetails u) {
         return Jwts.builder()
                 .subject(u.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSigingKey()).compact();
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(getSigingKey())
+                .compact();
     }
 
     public boolean isTokenValid(String token, UserDetails u) {

@@ -32,6 +32,7 @@ public class SecurityConfig {
             "/api-docs/**"
     };
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
        return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
