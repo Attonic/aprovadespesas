@@ -65,7 +65,9 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timesTamp(LocalDateTime.now())
                 .status(status.value())
-                .error(message)
+                .error(status.getReasonPhrase())
+                .message(message)
+                .messages(messages)
                 .path(request.getRequestURI())
                 .build();
 
