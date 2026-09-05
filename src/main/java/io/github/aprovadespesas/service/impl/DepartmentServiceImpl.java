@@ -30,6 +30,11 @@ public class DepartmentServiceImpl implements DepartmentServcie {
     @Transactional
     @Override
     public DepartmentResponse createDepartment(DepartmentRequest departmentRequest) {
+
+        if (departmentRepository.existsByName(departmentRequest.name())){
+            throw new ConflictException("Já existe departamento com esse nome.");
+        }
+
         Department department = Department.builder()
                 .name(departmentRequest.name())
                 .description(departmentRequest.description())
