@@ -22,7 +22,7 @@ public record RegisterUserRequest(
         String email,
 
         @NotBlank(message = "A Senha é obrigatória.")
-        @Size(min = 6, max = 16, message = "A Senha deve ter entre 6 a 16 caracteres.")
+        @Size(min = 6, max = 100, message = "A Senha deve ter entre 6 a 16 caracteres.")
         String password,
 
         @NotNull
